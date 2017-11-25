@@ -23,7 +23,7 @@ class NpiLookup::Doctor
     doctor_2.zip="02417"
     doctor_2.details="..."
 
-    [doctor_1.first_name, doctor_2.first_name]
+    [doctor_1, doctor_2]
   end
 
 end
