@@ -9,7 +9,7 @@ class NpiLookup::CLI
   def display_list
     puts "Welcome to NPI search (MA)"
     make_list
-    #@doctors=NpiLookup::Doctor.list
+    #add_attributes
     NpiLookup::Doctor.all.each.with_index(1) do |doctor,index|
       puts "#{index}.#{doctor.first_name} #{doctor.last_name} #{doctor.details}"
     end
@@ -32,6 +32,7 @@ class NpiLookup::CLI
       else
         index=input.to_i-1
         puts "More info about doctor #{NpiLookup::Doctor.all[index].last_name}"
+        puts add_attributes(NpiLookup::Doctor.all[index].details)[:mailing_address]
       end
   end
   end
@@ -44,4 +45,14 @@ class NpiLookup::CLI
     doctors_array = NpiLookup::Scraper.scrape_index_page
     NpiLookup::Doctor.create_from_list(doctors_array)
   end
+
+  def add_attributes (url)
+    #NpiLookup::Doctor.all.each do |doctor|
+    #puts url.to_s
+
+    attributes = NpiLookup::Scraper.scrape_profile_page(url)
+      #student.add_student_attributes(attributes)
+    #end
+  end
+
 end

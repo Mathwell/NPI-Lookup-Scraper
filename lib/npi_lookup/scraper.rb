@@ -34,40 +34,28 @@ class NpiLookup::Scraper
     @doctors
   end
 
-  def self.scrape_page(profile_url)
+  def self.scrape_profile_page(profile_url)
 
-      html=File.read(profile_url)
-      student=Nokogiri::HTML(html)
-      student_css=student.css("div.main-wrapper.profile")
-      twitter, linkedin, github, youtube, blog = "", "", "", "", ""
-      student_css.css(".social-icon-container a").each do |social|
-        if social["href"].include?("twitter")
-           twitter=social["href"]
-         elsif social["href"].include?("linkedin")
-           linkedin=social["href"]
-         elsif social["href"].include?("github")
-           github=social["href"]
-         elsif social["href"].include?("youtube")
-           youtube=social["href"]
-         else
-           blog=social["href"]
-         end
-      end
+      #html=File.read(profile_url)
+      doctor=Nokogiri::HTML(open(profile_url))
+      #doctor_css=student.css("table tr")
+      attributes=doctor.css("table tr")
+        individual={
+        :gender =>attributes[3].css("td")[2].text,
+        :provider_license =>attributes[4].css("td")[2].text,
+        :entity =>attributes[8].css("td")[2].text,
+        :last_update =>attributes[10].css("td")[2].text,
+        :mailing_address =>attributes[13].css("td")[2].text,
+        :m_phone =>attributes[14].css("td")[2].text,
+        :m_fax =>attributes[15].css("td")[2].text,
+        :business_address =>attributes[18].css("td")[2].text,
+        :b_phone =>attributes[19].css("td")[2].text,
+        :b_fax =>attributes[20].css("td")[2].text,
+        :primary_taxonomy => attributes[23].css("td")[2].text,
+        :secondary_taxonomy => attributes[24].css("td")[2].text,
+      }
 
-
-      individual={
-          :twitter => twitter,
-          :linkedin => linkedin,
-          :github => github,
-          :blog => blog,
-          :profile_quote => student.css(".profile-quote").text,
-          :bio =>student.css(".bio-content p").text,
-        }
-        individual.delete(:twitter) if individual[:twitter]==""
-        individual.delete(:linkedin) if individual[:linkedin]==""
-        individual.delete(:github) if individual[:github]==""
-        individual.delete(:blog) if individual[:blog]==""
-        individual
+       individual
       end
 
 
