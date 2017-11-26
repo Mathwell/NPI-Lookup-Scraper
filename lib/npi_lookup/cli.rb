@@ -1,24 +1,24 @@
 #CLI controller
 class NpiLookup::CLI
   def call
+    make_list
+    puts "Welcome to NPI search (MA)"
     display_list
     menu
     program_exit
   end
 
   def display_list
-    puts "Welcome to NPI search (MA)"
-    make_list
-    #add_attributes
     NpiLookup::Doctor.all.each.with_index(1) do |doctor,index|
       puts "#{index}.#{doctor.first_name} #{doctor.last_name} #{doctor.details}"
     end
   end
 
   def menu
-    puts "Enter doctor's name to lookup:"
+
     input=nil
     while input!="exit"
+        puts "Enter doctor's name/number to lookup, list to display a list, exit to exit seach:"
       input=gets.strip.downcase
       if input.to_i==0
         case input
@@ -30,11 +30,15 @@ class NpiLookup::CLI
           puts "not sure what would you like to do..."
         end
       else
-        index=input.to_i-1
-        puts "More info about doctor #{NpiLookup::Doctor.all[index].last_name}"
-        puts add_attributes(NpiLookup::Doctor.all[index].details)[:mailing_address]
+        display_detais(input)
       end
   end
+  end
+
+  def display_detais(input)
+    index=input.to_i-1
+    puts "More info about doctor #{NpiLookup::Doctor.all[index].last_name}"
+    puts add_attributes(NpiLookup::Doctor.all[index].details)[:mailing_address]
   end
 
   def program_exit
