@@ -21,11 +21,11 @@ class NpiLookup::Scraper
         td=doctor_css.css("td")
       @doctors<<{
         :last_name => td[1].text,
-        :first_name =>td[2].text,
+        :first_name =>td[3].text,
         :npi => td[0].text,
         :state => td[4].text,
         :zip => td[5].text,
-        :details => td[6]["href"]
+        :details => doctor_css.css("td a")[0]["href"]
       }
     end
     end
@@ -33,4 +33,42 @@ class NpiLookup::Scraper
     #puts @doctors
     @doctors
   end
+
+  def self.scrape_page(profile_url)
+
+      html=File.read(profile_url)
+      student=Nokogiri::HTML(html)
+      student_css=student.css("div.main-wrapper.profile")
+      twitter, linkedin, github, youtube, blog = "", "", "", "", ""
+      student_css.css(".social-icon-container a").each do |social|
+        if social["href"].include?("twitter")
+           twitter=social["href"]
+         elsif social["href"].include?("linkedin")
+           linkedin=social["href"]
+         elsif social["href"].include?("github")
+           github=social["href"]
+         elsif social["href"].include?("youtube")
+           youtube=social["href"]
+         else
+           blog=social["href"]
+         end
+      end
+
+
+      individual={
+          :twitter => twitter,
+          :linkedin => linkedin,
+          :github => github,
+          :blog => blog,
+          :profile_quote => student.css(".profile-quote").text,
+          :bio =>student.css(".bio-content p").text,
+        }
+        individual.delete(:twitter) if individual[:twitter]==""
+        individual.delete(:linkedin) if individual[:linkedin]==""
+        individual.delete(:github) if individual[:github]==""
+        individual.delete(:blog) if individual[:blog]==""
+        individual
+      end
+
+
 end

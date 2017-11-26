@@ -8,10 +8,10 @@ class NpiLookup::CLI
 
   def display_list
     puts "Welcome to NPI search (MA)"
-    @doctors=make_list
+    make_list
     #@doctors=NpiLookup::Doctor.list
-    @doctors.each.with_index(1) do |doctor,index|
-      puts "#{index}.#{doctor.first_name} #{doctor.last_name}"
+    NpiLookup::Doctor.all.each.with_index(1) do |doctor,index|
+      puts "#{index}.#{doctor.first_name} #{doctor.last_name} #{doctor.details}"
     end
   end
 
@@ -19,19 +19,20 @@ class NpiLookup::CLI
     puts "Enter doctor's name to lookup:"
     input=nil
     while input!="exit"
-    input=gets.strip.downcase
-    case input
-    when "1"
-      puts "Doctor 1"
-    when "2"
-      puts "Doctor 2"
-    when "exit"
-      puts "exiting..."
-    when "list"
-      display_list
-    else
-      puts "not sure what would you like to do..."
-    end
+      input=gets.strip.downcase
+      if input.to_i==0
+        case input
+        when "exit"
+          puts "exiting..."
+        when "list"
+          display_list
+        else
+          puts "not sure what would you like to do..."
+        end
+      else
+        index=input.to_i-1
+        puts "More info about doctor #{NpiLookup::Doctor.all[index].last_name}"
+      end
   end
   end
 
@@ -41,5 +42,6 @@ class NpiLookup::CLI
 
   def make_list
     doctors_array = NpiLookup::Scraper.scrape_index_page
+    NpiLookup::Doctor.create_from_list(doctors_array)
   end
 end
