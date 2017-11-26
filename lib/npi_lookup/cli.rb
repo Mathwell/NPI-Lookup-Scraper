@@ -8,7 +8,11 @@ class NpiLookup::CLI
 
   def display_list
     puts "Welcome to NPI search (MA)"
-    @doctors=NpiLookup::Doctor.list
+    @doctors=make_list
+    #@doctors=NpiLookup::Doctor.list
+    @doctors.each.with_index(1) do |doctor,index|
+      puts "#{index}.#{doctor.first_name} #{doctor.last_name}"
+    end
   end
 
   def menu
@@ -23,6 +27,8 @@ class NpiLookup::CLI
       puts "Doctor 2"
     when "exit"
       puts "exiting..."
+    when "list"
+      display_list
     else
       puts "not sure what would you like to do..."
     end
@@ -31,5 +37,9 @@ class NpiLookup::CLI
 
   def program_exit
     puts "Thank you for using out NPI search!"
+  end
+
+  def make_list
+    doctors_array = NpiLookup::Scraper.scrape_index_page
   end
 end

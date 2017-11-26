@@ -2,10 +2,10 @@ class NpiLookup::Doctor
   attr_accessor :last_name, :first_name, :npi, :state, :zip, :details
 
   def self.list
-    puts <<-DOC.gsub /^s*/,''
-    1. Doctor 1
-    2. Doctor 2
-    DOC
+    #puts <<-DOC.gsub /^s*/,''
+    #1. Doctor 1
+    #2. Doctor 2
+    #DOC
 
     doctor_1=self.new
     doctor_1.last_name="Doctor "
