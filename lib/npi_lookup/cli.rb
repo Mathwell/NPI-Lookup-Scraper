@@ -41,7 +41,7 @@ class NpiLookup::CLI
 
   def display_detais(input)
     index=input.to_i-1
-    if index<=NpiLookup::Doctor.all.length
+    if index<NpiLookup::Doctor.all.length
         puts "More info about doctor #{NpiLookup::Doctor.all[index].last_name}"
         puts add_attributes(NpiLookup::Doctor.all[index].details)[:mailing_address]
       else
