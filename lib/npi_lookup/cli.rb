@@ -37,6 +37,7 @@ class NpiLookup::CLI
 
   def display_detais_by_name(input)
     puts "#{input}"
+    puts "#{NpiLookup::Doctor.find_by_name(input)}"
   end
 
   def display_detais(input)

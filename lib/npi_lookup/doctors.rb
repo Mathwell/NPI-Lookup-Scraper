@@ -39,6 +39,10 @@ class NpiLookup::Doctor
   #  [doctor_1, doctor_2]
   #end
 
+  def self.find_by_name(name)
+    return @@all.select{|doctor| doctor.last_name.include?(name)}
+  end
+
   def self.create_from_list(doctors_array)
     doctors_array.each do |doctor|
       self.new(doctor)
