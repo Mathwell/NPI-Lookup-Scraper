@@ -38,8 +38,12 @@ class NpiLookup::CLI
   def display_detais_by_name(input)
     puts "#{input}"
     doctors=NpiLookup::Doctor.find_by_name(input)
-    puts doctors
-    #if !doctors.empty?
+    #puts doctors
+    if !doctors.empty?
+      for doctors.each{|doctor| display_detais(doctor)}
+    else
+      puts "Error: No doctor found."
+    end
 
   end
 
