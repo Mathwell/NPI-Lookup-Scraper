@@ -27,7 +27,7 @@ class NpiLookup::CLI
         when "list"
           display_list
         else
-          puts "not sure what would you like to do..."
+          display_detais_by_name(input)
         end
       else
         display_detais(input)
@@ -35,10 +35,18 @@ class NpiLookup::CLI
   end
   end
 
+  def display_detais_by_name(input)
+    puts "#{input}"
+  end
+
   def display_detais(input)
     index=input.to_i-1
-    puts "More info about doctor #{NpiLookup::Doctor.all[index].last_name}"
-    puts add_attributes(NpiLookup::Doctor.all[index].details)[:mailing_address]
+    if index<=NpiLookup::Doctor.all.length
+        puts "More info about doctor #{NpiLookup::Doctor.all[index].last_name}"
+        puts add_attributes(NpiLookup::Doctor.all[index].details)[:mailing_address]
+      else
+        puts "Error: #{input} does not exit in the database"
+      end
   end
 
   def program_exit
