@@ -40,7 +40,9 @@ class NpiLookup::Doctor
   #end
 
   def self.find_by_name(name)
-    return @@all.select{|doctor| doctor.last_name.include?(name)}
+    #binding.pry
+    return @@all.each_with_index.map{|doctor,index| doctor.last_name.downcase.include?(name) ? index : nil}
+    #return @@all.select{|doctor| doctor.last_name.downcase.include?(name)}
   end
 
   def self.create_from_list(doctors_array)
