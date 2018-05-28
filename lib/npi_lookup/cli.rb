@@ -10,9 +10,11 @@ class NpiLookup::CLI
 
   def display_list
     puts "====================================================================================================================================================="
+    puts "  #   |     First Name       |             Last Name                          |                  Details"
+    puts "====================================================================================================================================================="
     NpiLookup::Doctor.all.each.with_index(1) do |doctor,index|
 
-      puts "#{index.to_s.rjust(5)} | #{doctor.first_name.rjust(20)} | #{doctor.last_name.rjust(45)[0..44]}  |  #{doctor.details[0..40]}..."
+      puts "#{index.to_s.rjust(5)} | #{doctor.first_name.rjust(20)} | #{doctor.last_name.rjust(45)[0..44]}  |  #{doctor.details}"
     end
 
     #NpiLookup::Doctor.all.each.with_index(1) do |doctor,index|
@@ -44,7 +46,17 @@ class NpiLookup::CLI
   def display_detais_by_name(input)
     doctors=NpiLookup::Doctor.find_by_name(input)
     if !doctors.empty?
-      doctors.each{|doctor| display_detais(doctor+1)}
+      puts "====================================================================================================================================================="
+      puts "  #   |     First Name       |             Last Name                          |                  Business Address"
+      puts "====================================================================================================================================================="
+
+      doctors.each{|index|
+        doctor=NpiLookup::Doctor.all[index]
+        attridutes=add_attributes(NpiLookup::Doctor.all[index].details)
+        puts "#{index.to_s.rjust(5)} | #{doctor.first_name.rjust(20)} | #{doctor.last_name.rjust(45)[0..44]}  | #{attridutes[:mailing_address]}"
+        #display_detais(doctor+1)
+       }
+        puts "====================================================================================================================================================="
     else
       puts "Error: No doctor found."
     end
@@ -54,8 +66,14 @@ class NpiLookup::CLI
   def display_detais(input)
     index=input.to_i-1
     if index<NpiLookup::Doctor.all.length
-        puts "More info about doctor #{NpiLookup::Doctor.all[index].last_name}"
-        puts add_attributes(NpiLookup::Doctor.all[index].details)[:mailing_address]
+        doctor=NpiLookup::Doctor.all[index]
+        attridutes=add_attributes(NpiLookup::Doctor.all[index].details)
+        puts "More info about doctor #{doctor.last_name}"
+        puts "====================================================================================================================================================="
+        puts "  #   |     First Name       |             Last Name                          |                  Business Address"
+        puts "====================================================================================================================================================="
+        puts "#{input.to_s.rjust(5)} | #{doctor.first_name.rjust(20)} | #{doctor.last_name.rjust(45)[0..44]}  | #{attridutes[:mailing_address]}"
+        puts "====================================================================================================================================================="
       else
         puts "Error: #{input} does not exit in the database"
       end
