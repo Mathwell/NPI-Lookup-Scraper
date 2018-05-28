@@ -9,9 +9,15 @@ class NpiLookup::CLI
   end
 
   def display_list
+    puts "====================================================================================================================================================="
     NpiLookup::Doctor.all.each.with_index(1) do |doctor,index|
-      puts "#{index}.#{doctor.first_name} #{doctor.last_name} #{doctor.details}"
+
+      puts "#{index.to_s.rjust(5)} | #{doctor.first_name.rjust(20)} | #{doctor.last_name.rjust(45)[0..44]}  |  #{doctor.details[0..40]}..."
     end
+
+    #NpiLookup::Doctor.all.each.with_index(1) do |doctor,index|
+    #  puts "#{index}.#{doctor.first_name} #{doctor.last_name} #{doctor.details}"
+    #end
   end
 
   def menu
